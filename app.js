@@ -15,19 +15,6 @@ for (var i = 1; i <= 7; i++) {
   }
 }
 
-// API para gerar palavras aleatórias
-const makeRandomWord = async () => {
-  try {
-    let res = await axios.get("https://api.dicionario-aberto.net/random");
-    while (res.data.word.length != 5) {
-      res = await axios.get("https://api.dicionario-aberto.net/random");
-    }
-    console.log("Palavra aleatória: ", res.data.word);
-  } catch (e) {
-    console.log("error: ", e);
-  }
-};
-
 const words = [
   "total",
   "certo",
