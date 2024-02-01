@@ -3,11 +3,6 @@ form .form-group {
   justify-content: center;
 }
 
-#chute {
-  width: 15%;
-  margin-right: 10px;
-}
-
 .letter-wrapper {
   padding: 0 !important;
   font-size: 23px;

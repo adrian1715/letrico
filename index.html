@@ -12,7 +12,6 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
@@ -329,27 +328,28 @@
         </div>
       </div>
 
-      <br /><br />
+      <br />
+      <div id="message"></div>
+      <br />
 
-      <div id="keyboard">
+      <div id="keyboard" class="text-center d-flex justify-content-center">
         <form action="#">
-          <div class="form-group">
+          <div class="input-group">
             <input
               id="chute"
               class="form-control"
               type="text"
               placeholder="Chute uma palavra"
             />
-            <button id="chutar" class="btn btn-light" type="submit">
-              Enviar
+            <button id="chutar" class="btn btn-light border" type="submit">
+              Chutar
             </button>
           </div>
         </form>
-        <br /><br />
       </div>
-      <p>(Abra o console para ver as notificações da aplicação)</p>
     </div>
 
-    <script type="text/javascript" src="letrico.js"></script>
+    <script src="./words.js"></script>
+    <script type="text/javascript" src="app.js"></script>
   </body>
 </html>
