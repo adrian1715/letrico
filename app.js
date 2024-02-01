@@ -1,5 +1,5 @@
 // LETRICO COLORS GENERATOR
-for (var i = 1; i <= 7; i++) {
+for (let i = 1; i <= 7; i++) {
   switch (Math.floor(Math.random() * 5) + 1) {
     case 1:
       document.querySelector(`.let-${i}`).style.color = "green";
@@ -15,123 +15,59 @@ for (var i = 1; i <= 7; i++) {
   }
 }
 
-const words = [
-  "total",
-  "certo",
-  "local",
-  "lugar",
-  "norte",
-  "tanto",
-  "corte",
-  "forte",
-  "fonte",
-  "chute",
-  "sagaz",
-  "mexer",
-  "termo",
-  "senso",
-  "nobre",
-  "algoz",
-  "afeto",
-  "sutil",
-  "vigor",
-  "fazer",
-  "sanar",
-  "assim",
-  "desde",
-  "ideia",
-  "fosse",
-  "moral",
-  "poder",
-  "sonho",
-  "vinil",
-  "teste",
-  "pardo",
-  "verde",
-  "vasco",
-  "casco",
-  "honra",
-  "muito",
-  "justo",
-  "anexo",
-  "pedra",
-  "papel",
-  "haver",
-  "amigo",
-  "posse",
-  "tempo",
-  "causa",
-  "dizer",
-  "digno",
-  "letra",
-  "legal",
-  "coisa",
-  "plano",
-  "circo",
-  "piano",
-  "antes",
-  "louco",
-  "cacto",
-  "carro",
-  "arroz",
-  "viver",
-  "morte",
-  "nadar",
-  "mudar",
-  "andar",
-  "salve",
-  "tente",
-  "torto",
-  "morto",
-  "posto",
-  "corpo",
-  "custo",
-  "ouvir",
-  "vento",
-  "chuva",
-  "ponte",
-  "monte",
-];
-
 const keyword = words[Math.floor(Math.random() * words.length)]; // PALAVRA-CHAVE SORTEADA
-const chute = document.getElementById("chute"); // input de chute
-const chutar = document.getElementById("chutar"); // botão de submit do chute
 const form = document.querySelector("form");
+// const chute = document.getElementById("chute");
+// const chutar = document.getElementById("chutar"); // botão de submit do chute
 
 let guess = [],
-  cont = 0;
+  wordCount = 0;
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e) => submitHandler(e));
+function submitHandler(e) {
   e.preventDefault();
+
   const letras = ["A", "B", "C", "D", "E"];
 
-  // transforma todas as letras em minúsculas (para continuar reconhecível caso o usuário digite alguma letra maiúscula)
-  chute.value = chute.value.toLowerCase();
+  let chuteValue = e.target.elements.chute.value.toLowerCase();
+
+  let msg;
+  const message = document.getElementById("message");
+  if (message.children.length > 0) {
+    message.removeChild(document.querySelector("p"));
+  }
 
   // LÓGICA PARA VERIFICAÇÃO DE PALAVRA
   if (
-    cont != 7 &&
-    (chute.value.length != 5 || words.includes(chute.value) === false)
+    wordCount != 7 &&
+    (chuteValue.length != 5 || words.includes(chuteValue) === false)
   ) {
-    if (chute.value.length != 5) {
+    if (chuteValue.length != 5) {
       console.log("Chute uma palavra de 5 letras");
-      chute.value = "";
-    } else if (words.includes(chute.value) === false) {
+
+      msg = document.createElement("p");
+      msg.innerText = "Chute uma palavra de 5 letras!";
+    } else if (words.includes(chuteValue) === false) {
       console.log("Palavra inválida! Tente outra palavra!");
-      chute.value = "";
+
+      msg = document.createElement("p");
+      msg.innerText = "Palavra inválida! Tente outra palavra!";
     }
-  } else {
-    if (cont < 6) {
-      cont++;
-      guess.push(chute.value);
-      chute.value = "";
-      console.log("Seus chutes: ", guess);
+    if (!chuteValue) {
+      console.log("Insira uma palavra para chutar!");
+
+      msg = document.createElement("p");
+      msg.innerText = "Insira uma palavra para chutar!";
     }
+  } else if (wordCount < 6) {
+    wordCount++;
+    guess.push(chuteValue);
+    console.log("Seus chutes: ", guess);
   }
 
-  if (chute.value != "") chute.value = "";
+  if (chuteValue != "") chute.value = ""; // chuteValue não precisa ser redefinido
 
-  switch (cont) {
+  switch (wordCount) {
     case 1:
       for (let i = 0; i < 5; i++) {
         // PARA ADICIONAR VISUALMENTE A PALAVRA INSERIDA - PRIMEIRA PALAVRA/TENTATIVA
@@ -295,9 +231,15 @@ form.addEventListener("submit", (e) => {
 
       // CASO NENHUMA DAS TENTATIVAS SEJAM CORRETAS
       if (guess[guess.length - 1] != keyword) {
-        cont++;
+        wordCount++;
         console.log("Suas tentativas acabaram :(");
-        chute.value = "";
+        console.log("Palavra correta era: ", keyword);
+
+        msg = document.createElement("p");
+        msg.innerText = `Suas tentativas acabaram! A palavra correta era: ${keyword}`;
+
+        chute.disabled = "true";
+        chutar.disabled = "true";
       }
 
       break;
@@ -306,7 +248,15 @@ form.addEventListener("submit", (e) => {
   // CASO A TENTATIVA ESTEJA CORRETA
   if (guess[guess.length - 1] == keyword) {
     console.log("Parabéns, vc ganhou!");
+
+    msg = document.createElement("p");
+    msg.innerText = "Parabéns, você ganhou!";
+
+    chute.disabled = "true";
+    chutar.disabled = "true";
     guess = [];
-    cont = 7;
+    wordCount = 7;
   }
-});
+
+  if (msg) message.appendChild(msg);
+}
